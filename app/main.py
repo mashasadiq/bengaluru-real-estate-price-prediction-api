@@ -138,4 +138,3 @@ def predict_price(house: HouseFeatures):
             status_code=500,
             detail="Prediction failed due to an internal server error."
         )
-

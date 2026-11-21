@@ -9,7 +9,6 @@ from pydantic import BaseModel, ConfigDict, Field
 class HouseFeatures(BaseModel):
     """Validated input features for a house-price prediction."""
 
-    
     model_config = ConfigDict(
         str_strip_whitespace=True,
         extra="forbid",
