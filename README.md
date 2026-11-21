@@ -82,11 +82,12 @@ These results are from the model's held-out evaluation dataset.
 
 ## 6. API Endpoints
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/` | API welcome message |
-| GET | `/health` | Checks service and model availability |
-| POST | `/predict` | Predicts a property's estimated price |
+The API will be available at:
+
+`http://127.0.0.1:8000`
+
+- Swagger UI: `http://127.0.0.1:8000/docs`
+- ReDoc: `http://127.0.0.1:8000/redoc`
 
 ### Prediction request
 
@@ -227,7 +228,67 @@ python -m pytest -v
 - Cloud deployment.
 - Frontend integration.
 
-## 12. Project Status
+## 12. Deployment on Render
+
+The API can be deployed as a Python Web Service on [Render](https://render.com/).
+
+### Prerequisites
+
+- A GitHub account.
+- The project repository pushed to GitHub.
+- The trained model artifact committed to the repository.
+
+### Create a Render Web Service
+
+1. Sign in to [Render](https://render.com/).
+2. Select **New → Web Service**.
+3. Connect your GitHub account and select the `bengaluru-real-estate-price-prediction-api` repository.
+4. Configure the service using the following settings:
+
+| Setting | Value |
+|---|---|
+| Name | bengaluru-real-estate-price-api |
+| Runtime | Python 3 |
+| Branch | main |
+| Root Directory | Leave blank |
+| Build Command | `pip install -r requirements.txt` |
+| Start Command | `uvicorn app.main:app --host 0.0.0.0 --port $PORT` |
+
+### Environment Variables
+
+Under the Render service's Environment settings, add:
+
+| Key | Value |
+|---|---|
+| `ENVIRONMENT` | `production` |
+
+Render automatically provides the `PORT` environment variable. It should not be manually configured.
+
+The local `.env` file is excluded from Git and should not be uploaded to Render.
+
+### Deployment Verification
+
+After creating the service, Render installs the dependencies, builds the application and starts the FastAPI server.
+
+Once deployment succeeds, verify the following endpoints using your Render service URL:
+
+- API welcome endpoint: `https://YOUR-RENDER-URL/`
+- Health check: `https://YOUR-RENDER-URL/health`
+- Swagger UI: `https://YOUR-RENDER-URL/docs`
+- ReDoc: `https://YOUR-RENDER-URL/redoc`
+
+A successful health check should return:
+
+```json
+{
+    "status": "healthy",
+    "model_loaded": true
+}
+```
+
+The health endpoint confirms that the application has loaded the trained model successfully.
+
+## 13. Project Status
 
 **Version:** 1.0.0
 
